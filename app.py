@@ -4,6 +4,7 @@ from flask_cors import CORS
 from auth import check_, check_invite
 from time import time
 import database
+import re
 
 app = Flask(__name__)
 api = Api(app)
@@ -48,8 +49,11 @@ class CreateUser(Resource):
         c = check_invite(invite_code, g.start)
         if c == 8:
             try:
-                x = database.PostgreSQL().add_user(name, request.remote_addr)
-                return jsonify({"ok": True, "token": x, "time": "%.5fs" % (time() - g.start)})
+                if name == re.sub(r"[^A-Za-z]", "", name):
+                    x = database.PostgreSQL().add_user(name, request.remote_addr)
+                    database.PostgreSQL().delete_invite(invite_code)
+                    return jsonify({"ok": True, "token": x, "time": "%.5fs" % (time() - g.start)})
+                return jsonify({"ok": False, "result": "The name can only consist of Latin letters", "time": "%.5fs" % (time() - g.start)})
             except Exception as e:
                 return jsonify({
                     "ok": False, "result": "Error create account", "time": "%.5fs" % (time() - g.start)

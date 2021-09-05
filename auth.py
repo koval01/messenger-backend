@@ -12,7 +12,6 @@ def check_(token: str, start: float) -> int or jsonify:
 
 def check_invite(code: str, start: float) -> int or jsonify:
     if database.PostgreSQL().get_invite(code):
-        database.PostgreSQL().delete_invite(code)
         return 8
     else:
         return jsonify({"ok": False, "result": "Error invite code check", "time": "%.5fs" % (time() - start)})
