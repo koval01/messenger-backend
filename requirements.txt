@@ -1,0 +1,5 @@
+gunicorn
+Flask
+flask-restful
+Flask-Cors
+psycopg2
