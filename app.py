@@ -12,7 +12,8 @@ CORS(app)
 
 class status(Resource):
     def get(self):
-        return jsonify({'run': True})
+        g.start = time()
+        return jsonify({'run': True, "time": "%.5fs" % (time() - g.start)})
 
 
 class GetChats(Resource):
