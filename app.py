@@ -7,7 +7,6 @@ from auth import check_, check_invite
 from time import time
 import database
 import filter
-import re
 
 app = Flask(__name__)
 api = Api(app)
