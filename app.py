@@ -15,8 +15,7 @@ CORS(app)
 
 class status(Resource):
     def get(self) -> None:
-        g.start = time()
-        return jsonify({'run': True, "time": "%.5fs" % (time() - g.start)})
+        return jsonify({'run': True})
 
 
 class GetChats(Resource):
@@ -27,7 +26,7 @@ class GetChats(Resource):
             data = database.PostgreSQL(token).get_chats()
             return jsonify({
                 "ok": True, "chat_ids": data,
-                "time": "%.5fs" % (time() - g.start),
+                "time": round(time() - g.start, 3),
             })
         else: return c
 
@@ -41,7 +40,7 @@ class GetMe(Resource):
             return jsonify({
                 "ok": True, "name": data["name"], "last_activity": data["last_activity"],
                 "last_ip": data["last_ip"], "ban": data["ban"], "id": data["id"],
-                "time": "%.5fs" % (time() - g.start),
+                "time": round(time() - g.start, 3),
             })
         else: return c
 
@@ -55,21 +54,21 @@ class CreateUser(Resource):
                 if name == filter.Init(name).wide():
                     x = database.PostgreSQL().add_user(name, request.remote_addr)
                     database.PostgreSQL().delete_invite(invite_code)
-                    return jsonify({"ok": True, "token": x, "time": "%.5fs" % (time() - g.start)})
+                    return jsonify({"ok": True, "token": x, "time": round(time() - g.start, 3)})
                 return jsonify({
                     "ok": False,
                     "result": "The name can be Latin or Cyrillic characters, numbers and signs"
                               " \"-\" and \"_\" are also allowed. Also do not forget that at the "
                               "beginning and at the end of the term all indents are cut off, "
                               "therefore check up whether.",
-                    "time": "%.5fs" % (time() - g.start)
+                    "time": round(time() - g.start, 3)
                 })
             except Exception as e:
                 logging.warning(e)
                 return jsonify({
                     "ok": False,
                     "result": "Error create account. The name may be longer than 255 characters.",
-                    "time": "%.5fs" % (time() - g.start)
+                    "time": round(time() - g.start, 3)
                 })
         else: return c
 
@@ -92,12 +91,12 @@ class CreateChat(Resource):
                                 "result": "The group was successfully created",
                                 "chat_id": x["id"],
                                 "chat_name": x["name"],
-                                "time": "%.5fs" % (time() - g.start)
+                                "time": round(time() - g.start, 3)
                             })
                     return jsonify({
                         "ok": False,
                         "result": "Group create error",
-                        "time": "%.5fs" % (time() - g.start)
+                        "time": round(time() - g.start, 3)
                     })
                 return jsonify({
                     "ok": False, "result": "The name can be Latin or Cyrillic characters, numbers and signs"
@@ -106,14 +105,14 @@ class CreateChat(Resource):
                                            "beginning and at the end of the term all indents are cut off, "
                                            "therefore check up whether. The name or description may be "
                                            "longer than 255 characters.",
-                    "time": "%.5fs" % (time() - g.start)
+                    "time": round(time() - g.start, 3)
                 })
             except Exception as e:
                 logging.warning(e)
                 return jsonify({
                     "ok": False,
                     "result": "Error create chat",
-                    "time": "%.5fs" % (time() - g.start)
+                    "time": round(time() - g.start, 3)
                 })
         else: return c
 

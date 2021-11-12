@@ -7,11 +7,11 @@ def check_(token: str, start: float) -> int or jsonify:
     if database.PostgreSQL(token).get_user():
         return 8
     else:
-        return jsonify({"ok": False, "result": "Error auth check", "time": "%.5fs" % (time() - start)})
+        return jsonify({"ok": False, "result": "Error auth check", "time": round(time() - start, 3)})
 
 
 def check_invite(code: str, start: float) -> int or jsonify:
     if database.PostgreSQL().get_invite(code):
         return 8
     else:
-        return jsonify({"ok": False, "result": "Error invite code check", "time": "%.5fs" % (time() - start)})
+        return jsonify({"ok": False, "result": "Error invite code check", "time": round(time() - start, 3)})
