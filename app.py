@@ -5,8 +5,11 @@ from flask_restful import Resource, Api
 from flask_cors import CORS
 from auth import check_, check_invite
 from time import time
+
 import database
 import filter
+
+from messages import messages_dict
 
 app = Flask(__name__)
 api = Api(app)
@@ -22,19 +25,23 @@ class GetChats(Resource):
     def get(self, token: str) -> None:
         g.start = time()
         c = check_(token, g.start)
+
         if c == 8:
             data = database.PostgreSQL(token).get_chats()
             return jsonify({
                 "ok": True, "chat_ids": data,
                 "time": round(time() - g.start, 3),
             })
-        else: return c
+
+        else:
+            return c
 
 
 class GetMe(Resource):
     def get(self, token: str) -> None:
         g.start = time()
         c = check_(token, g.start)
+
         if c == 8:
             data = database.PostgreSQL(token).get_user()
             return jsonify({
@@ -42,13 +49,16 @@ class GetMe(Resource):
                 "last_ip": data["last_ip"], "ban": data["ban"], "id": data["id"],
                 "time": round(time() - g.start, 3),
             })
-        else: return c
+
+        else:
+            return c
 
 
 class CreateUser(Resource):
     def get(self, invite_code: str, name: str) -> None:
         g.start = time()
         c = check_invite(invite_code, g.start)
+
         if c == 8:
             try:
                 if name == filter.Init(name).wide():
@@ -57,20 +67,20 @@ class CreateUser(Resource):
                     return jsonify({"ok": True, "token": x, "time": round(time() - g.start, 3)})
                 return jsonify({
                     "ok": False,
-                    "result": "The name can be Latin or Cyrillic characters, numbers and signs"
-                              " \"-\" and \"_\" are also allowed. Also do not forget that at the "
-                              "beginning and at the end of the term all indents are cut off, "
-                              "therefore check up whether.",
+                    "result": messages_dict["username_error"],
                     "time": round(time() - g.start, 3)
                 })
+
             except Exception as e:
                 logging.warning(e)
                 return jsonify({
                     "ok": False,
-                    "result": "Error create account. The name may be longer than 255 characters.",
+                    "result": messages_dict["account_create_error"],
                     "time": round(time() - g.start, 3)
                 })
-        else: return c
+
+        else:
+            return c
 
 
 class CreateChat(Resource):
@@ -83,38 +93,39 @@ class CreateChat(Resource):
                         description == filter.Init(description).default():
                     user_ = database.PostgreSQL(token).get_user()
                     x = database.PostgreSQL(token).add_chat(name, description)
+
                     if x and user_:
                         y = database.PostgreSQL(token).add_member(user_["id"], x["id"])
                         if y:
                             return jsonify({
                                 "ok": True,
-                                "result": "The group was successfully created",
+                                "result": messages_dict["chat_created"],
                                 "chat_id": x["id"],
                                 "chat_name": x["name"],
                                 "time": round(time() - g.start, 3)
                             })
+
                     return jsonify({
                         "ok": False,
-                        "result": "Group create error",
+                        "result": messages_dict["chat_create_error"],
                         "time": round(time() - g.start, 3)
                     })
+
                 return jsonify({
-                    "ok": False, "result": "The name can be Latin or Cyrillic characters, numbers and signs"
-                                           " \"-\" and \"_\" are also allowed. All basic punctuation marks "
-                                           "are allowed for the description. Also do not forget that at the "
-                                           "beginning and at the end of the term all indents are cut off, "
-                                           "therefore check up whether. The name or description may be "
-                                           "longer than 255 characters.",
+                    "ok": False, "result": messages_dict["chat_name_error"],
                     "time": round(time() - g.start, 3)
                 })
+
             except Exception as e:
                 logging.warning(e)
                 return jsonify({
                     "ok": False,
-                    "result": "Error create chat",
+                    "result": messages_dict["chat_create_error"],
                     "time": round(time() - g.start, 3)
                 })
-        else: return c
+
+        else:
+            return c
 
 
 api.add_resource(status, '/')

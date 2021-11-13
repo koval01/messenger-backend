@@ -29,6 +29,7 @@ class PostgreSQL:
             result = self.cursor.fetchone()
             self.finish()
             return result
+
         except Exception as e:
             logging.debug(e)
 
@@ -56,6 +57,7 @@ class PostgreSQL:
             result = self.cursor.fetchone()
             self.finish()
             return result
+
         except Exception as e:
             logging.debug(e)
 
@@ -68,6 +70,7 @@ class PostgreSQL:
             self.conn.commit()
             self.finish()
             return True
+
         except Exception as e:
             logging.debug(e)
 
@@ -80,6 +83,7 @@ class PostgreSQL:
             result = self.cursor.fetchall()
             self.finish()
             return result
+
         except Exception as e:
             logging.debug(e)
 
@@ -98,6 +102,7 @@ class PostgreSQL:
             result = self.cursor.fetchone()
             self.finish()
             return result
+
         except Exception as e:
             logging.warning(e)
 
@@ -116,6 +121,7 @@ class PostgreSQL:
             result = self.cursor.fetchone()
             self.finish()
             return result
+
         except Exception as e:
             logging.debug(e)
 
@@ -132,6 +138,7 @@ class PostgreSQL:
             self.conn.commit()
             self.finish()
             return True
+
         except Exception as e:
             logging.warning(e)
 
@@ -148,5 +155,6 @@ class PostgreSQL:
             result = self.cursor.fetchall()
             self.finish()
             return [i[0] for i in result]
+
         except Exception as e:
             logging.warning(e)
