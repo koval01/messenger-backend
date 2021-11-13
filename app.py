@@ -1,14 +1,13 @@
 import logging
+from time import time
 
 from flask import Flask, jsonify, request, g
-from flask_restful import Resource, Api
 from flask_cors import CORS
-from auth import check_, check_invite
-from time import time
+from flask_restful import Resource, Api
 
 import database
 import filter
-
+from auth import check_, check_invite
 from messages import messages_dict
 
 app = Flask(__name__)

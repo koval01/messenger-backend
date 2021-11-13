@@ -1,6 +1,7 @@
-from string import punctuation
-from config import EMOJI as emoji
 import re
+from string import punctuation
+
+from config import EMOJI as emoji
 
 
 class Init:

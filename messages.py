@@ -12,4 +12,6 @@ messages_dict = {
                        "therefore check up whether. The name or description may be "
                        "longer than 255 characters.",
     "chat_created": "The group was successfully created",
+    "auth_error": "Error auth check",
+    "invite_error": "Error invite code check",
 }

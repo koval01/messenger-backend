@@ -1,8 +1,9 @@
 import logging
+
 import psycopg2
 from psycopg2 import extras
-import generator
 
+import generator
 from config import DB_HOST, DB_NAME, DB_PASS, DB_USER
 
 
