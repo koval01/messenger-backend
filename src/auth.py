@@ -3,7 +3,7 @@ from time import time
 from flask import jsonify
 
 from src import database
-from messages import messages_dict
+from src.messages import messages_dict
 
 
 def check_(token: str, start: float) -> int or jsonify:
