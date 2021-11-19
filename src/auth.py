@@ -2,7 +2,7 @@ from time import time
 
 from flask import jsonify
 
-import database
+from src import database
 from messages import messages_dict
 
 
